@@ -1798,5 +1798,20 @@
       "ee_pos_error": 0.04697215184569359,
       "ee_ori_error": 0.1796594262123108
     }
+  },
+  {
+    "id": "goypgaze",
+    "name": "2026-05-16_02-01-05",
+    "url": "https://wandb.ai/gcbc_researchers/mjlab/runs/goypgaze",
+    "created_at": "2026-05-16T09:01:10Z",
+    "commit": "a0ba058",
+    "metrics": {
+      "success_rate": 0.9697265625,
+      "mpkpe": 0.0309123657643795,
+      "r_mpkpe": 0.030329497531056404,
+      "joint_vel_error": 3.078700542449951,
+      "ee_pos_error": 0.05062491446733475,
+      "ee_ori_error": 0.18273887038230896
+    }
   }
 ]

@@ -1888,5 +1888,20 @@
       "ee_pos_error": 0.0528673380613327,
       "ee_ori_error": 0.17711080610752106
     }
+  },
+  {
+    "id": "dbpvgtn1",
+    "name": "2026-05-22_02-10-06",
+    "url": "https://wandb.ai/gcbc_researchers/mjlab/runs/dbpvgtn1",
+    "created_at": "2026-05-22T09:10:10Z",
+    "commit": "731fa27",
+    "metrics": {
+      "success_rate": 0.9814453125,
+      "mpkpe": 0.029341887682676315,
+      "r_mpkpe": 0.027973558753728867,
+      "joint_vel_error": 3.1514596939086914,
+      "ee_pos_error": 0.046682849526405334,
+      "ee_ori_error": 0.17318949103355408
+    }
   }
 ]

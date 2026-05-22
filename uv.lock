@@ -405,6 +405,15 @@ wheels = [
 ]
 
 [[package]]
+name = "colorlogging"
+version = "0.0.2"
+source = { registry = "https://pypi.org/simple" }
+sdist = { url = "https://files.pythonhosted.org/packages/a1/49/b11ed1d66a453a9d948a23e8e91a36c3595007e9a2cf3b259704052f23c1/colorlogging-0.0.2.tar.gz", hash = "sha256:f1d47ca553df59706474296187679655781a80c00d53202617625ada3c3cb890", size = 34961, upload-time = "2024-10-16T20:11:58.748Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/87/88/ea3a8378de7a78703d5f10bd04a4f83b193e5026a60d29bacec6c899e188/colorlogging-0.0.2-py3-none-any.whl", hash = "sha256:ae9a3ce3ceca60372569f6acbad7cfd097f812d40596b655c26a74283f9f9faf", size = 6014, upload-time = "2024-10-16T20:11:57.623Z" },
+]
+
+[[package]]
 name = "contourpy"
 version = "1.3.2"
 source = { registry = "https://pypi.org/simple" }
@@ -1667,6 +1676,8 @@ dependencies = [
     { name = "tqdm" },
     { name = "trimesh" },
     { name = "tyro" },
+    { name = "urdf2mjcf", version = "0.1.3", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
+    { name = "urdf2mjcf", version = "0.2.39", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
     { name = "viser" },
     { name = "wandb" },
     { name = "warp-lang" },
@@ -1732,6 +1743,7 @@ requires-dist = [
     { name = "tqdm" },
     { name = "trimesh", specifier = ">=4.8.3" },
     { name = "tyro", specifier = ">=1.0.1" },
+    { name = "urdf2mjcf", specifier = ">=0.1.3" },
     { name = "viser", specifier = ">=1.0.27" },
     { name = "wandb", specifier = ">=0.22.3" },
     { name = "warp-lang", marker = "sys_platform != 'darwin'", specifier = ">=1.12.0", index = "https://pypi.nvidia.com/" },
@@ -4589,6 +4601,67 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/cf/b5/6fbb72a695975f5bc2e2ca00b847d5af1e85e6a473427f9f5f2c3a8d4601/tyro-1.0.1.tar.gz", hash = "sha256:45f5ed511c75c7ce9b7c311861ae259fda4cd0f971fae494c7161108e2f9e0db", size = 442689, upload-time = "2025-12-12T01:10:27.442Z" }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/27/28/d938acc053b55f61e1be85ee6c9d88ceac5fea5d386bbf44684b645d9898/tyro-1.0.1-py3-none-any.whl", hash = "sha256:86c178c1ae39cc8be9d03d3149de70374c0c5c8682c5f48758cd299145719bf7", size = 179598, upload-time = "2025-12-12T01:10:26.016Z" },
+]
+
+[[package]]
+name = "urdf2mjcf"
+version = "0.1.3"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version < '3.11' and platform_machine != 's390x' and sys_platform == 'linux'",
+    "python_full_version < '3.11' and platform_machine == 's390x' and sys_platform == 'linux'",
+    "python_full_version < '3.11' and platform_machine != 's390x' and sys_platform != 'darwin' and sys_platform != 'linux'",
+    "python_full_version < '3.11' and platform_machine == 's390x' and sys_platform != 'darwin' and sys_platform != 'linux'",
+    "python_full_version < '3.11' and platform_machine != 'arm64' and platform_machine != 's390x' and sys_platform == 'darwin'",
+    "python_full_version < '3.11' and platform_machine == 's390x' and sys_platform == 'darwin'",
+    "python_full_version < '3.11' and platform_machine == 'arm64' and sys_platform == 'darwin'",
+]
+dependencies = [
+    { name = "mujoco", marker = "python_full_version < '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/7b/20/f5f10f5dc2b3b669c8bab417c711b0796de786f6dda18fdad9ea5e820d29/urdf2mjcf-0.1.3.tar.gz", hash = "sha256:aa5e08c661d5e5000e0f67d770c8c99c2b50a672315f0abf2bb915cc1074c591", size = 9235, upload-time = "2025-01-31T07:58:15.586Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/86/65/3335e41f7401ed9b67eb32b32bcde19fc5036ce49e774da2ef67428cd3fa/urdf2mjcf-0.1.3-py3-none-any.whl", hash = "sha256:c82690249831201b89ec4c4862a73cb2aa853c9dc93ae2ba58cb01a961dccce1", size = 8079, upload-time = "2025-01-31T07:58:13.583Z" },
+]
+
+[[package]]
+name = "urdf2mjcf"
+version = "0.2.39"
+source = { registry = "https://pypi.org/simple" }
+resolution-markers = [
+    "python_full_version >= '3.13' and platform_machine != 's390x' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and platform_machine == 's390x' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and platform_machine != 's390x' and sys_platform == 'linux'",
+    "python_full_version == '3.12.*' and platform_machine == 's390x' and sys_platform == 'linux'",
+    "python_full_version >= '3.13' and platform_machine != 's390x' and sys_platform != 'darwin' and sys_platform != 'linux'",
+    "python_full_version >= '3.13' and platform_machine == 's390x' and sys_platform != 'darwin' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and platform_machine != 's390x' and sys_platform != 'darwin' and sys_platform != 'linux'",
+    "python_full_version == '3.12.*' and platform_machine == 's390x' and sys_platform != 'darwin' and sys_platform != 'linux'",
+    "python_full_version == '3.11.*' and platform_machine != 's390x' and sys_platform == 'linux'",
+    "python_full_version == '3.11.*' and platform_machine == 's390x' and sys_platform == 'linux'",
+    "python_full_version == '3.11.*' and platform_machine != 's390x' and sys_platform != 'darwin' and sys_platform != 'linux'",
+    "python_full_version == '3.11.*' and platform_machine == 's390x' and sys_platform != 'darwin' and sys_platform != 'linux'",
+    "python_full_version >= '3.13' and platform_machine != 'arm64' and platform_machine != 's390x' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and platform_machine == 's390x' and sys_platform == 'darwin'",
+    "python_full_version >= '3.13' and platform_machine == 'arm64' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and platform_machine != 'arm64' and platform_machine != 's390x' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and platform_machine == 's390x' and sys_platform == 'darwin'",
+    "python_full_version == '3.12.*' and platform_machine == 'arm64' and sys_platform == 'darwin'",
+    "python_full_version == '3.11.*' and platform_machine != 'arm64' and platform_machine != 's390x' and sys_platform == 'darwin'",
+    "python_full_version == '3.11.*' and platform_machine == 's390x' and sys_platform == 'darwin'",
+    "python_full_version == '3.11.*' and platform_machine == 'arm64' and sys_platform == 'darwin'",
+]
+dependencies = [
+    { name = "colorlogging", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
+    { name = "mujoco", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
+    { name = "numpy", version = "2.3.4", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
+    { name = "pydantic", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
+    { name = "scipy", version = "1.16.2", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
+    { name = "trimesh", marker = "python_full_version >= '3.11' or (extra == 'extra-5-mjlab-cpu' and extra == 'extra-5-mjlab-cu128')" },
+]
+sdist = { url = "https://files.pythonhosted.org/packages/8c/ef/cf38ba80e9981dfb5c3452bb5cd84802bb3b54c7c69f7c955c00e4ab2d41/urdf2mjcf-0.2.39.tar.gz", hash = "sha256:d75e5912a4aa4710ff764fd4b6a3585233ccb6ae609784bd7604859642318811", size = 25662, upload-time = "2025-08-17T18:06:40.874Z" }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/6e/1b/a78d55f5b83ac4dba6c1277698006b070f9c6c7c6c154b7eea7ae8051bf1/urdf2mjcf-0.2.39-py3-none-any.whl", hash = "sha256:115d823e04e85c19acaec5fbcedb3e9babef7f4a3e5c6d6bbc3b7372fd5df3e4", size = 29710, upload-time = "2025-08-17T18:06:39.624Z" },
 ]
 
 [[package]]

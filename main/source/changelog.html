@@ -607,6 +607,12 @@ kick).</p></li>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fixed the tracking MPKPE metric (<code class="docutils literal notranslate"><span class="pre">compute_mpkpe</span></code>) using the reward’s
+drift-cancelled reference <code class="docutils literal notranslate"><span class="pre">body_pos_relative_w</span></code> instead of the true
+global reference <code class="docutils literal notranslate"><span class="pre">body_pos_w</span></code>. It is documented to measure global-frame
+keypoint error but previously never captured global drift and nearly
+duplicated the root-relative metric. It now uses <code class="docutils literal notranslate"><span class="pre">body_pos_w</span></code>
+(<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1006">#1006</a>).</p></li>
 <li><p>Fixed heavy flicker in offscreen training videos on rough-terrain tasks.
 The renderer recomputed its context “neighbor” robots every frame from
 <code class="docutils literal notranslate"><span class="pre">env_origins</span></code>, which the terrain curriculum mutates on reset, so the

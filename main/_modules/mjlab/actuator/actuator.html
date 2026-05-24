@@ -596,15 +596,6 @@ document.write(`
     <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">delay_max_lag</span> <span class="o">&gt;</span> <span class="mi">0</span>
 
   <span class="nd">@property</span>
-  <span class="k">def</span><span class="w"> </span><span class="nf">command_field</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">CommandField</span> <span class="o">|</span> <span class="kc">None</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;The primary command field this actuator consumes.</span>
-
-<span class="sd">    Returns None by default. Subclasses should override to return the</span>
-<span class="sd">    appropriate field.</span>
-<span class="sd">    &quot;&quot;&quot;</span>
-    <span class="k">return</span> <span class="kc">None</span>
-
-  <span class="nd">@property</span>
   <span class="k">def</span><span class="w"> </span><span class="nf">target_ids</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Local indices of targets controlled by this actuator.&quot;&quot;&quot;</span>
     <span class="k">assert</span> <span class="bp">self</span><span class="o">.</span><span class="n">_target_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
@@ -698,11 +689,6 @@ document.write(`
 <span class="w">    </span><span class="sd">&quot;&quot;&quot;Create delay buffer. Called during initialize().&quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="ow">not</span> <span class="bp">self</span><span class="o">.</span><span class="n">has_delay</span><span class="p">:</span>
       <span class="k">return</span>
-    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_field</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="vm">__class__</span><span class="o">.</span><span class="vm">__name__</span><span class="si">}</span><span class="s2">: delay is configured (delay_max_lag=&quot;</span>
-        <span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">delay_max_lag</span><span class="si">}</span><span class="s2">) but command_field is not defined.&quot;</span>
-      <span class="p">)</span>
     <span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span> <span class="o">=</span> <span class="n">DelayBuffer</span><span class="p">(</span>
       <span class="n">min_lag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">delay_min_lag</span><span class="p">,</span>
       <span class="n">max_lag</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">delay_max_lag</span><span class="p">,</span>
@@ -716,19 +702,25 @@ document.write(`
 <div class="viewcode-block" id="Actuator.apply_delay">
 <a class="viewcode-back" href="../../../source/api/actuator.html#mjlab.actuator.Actuator.apply_delay">[docs]</a>
   <span class="k">def</span><span class="w"> </span><span class="nf">apply_delay</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">ActuatorCmd</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">ActuatorCmd</span><span class="p">:</span>
-<span class="w">    </span><span class="sd">&quot;&quot;&quot;Apply delay to the command_field target. No-op without delay.&quot;&quot;&quot;</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Delay all command targets with one shared lag. No-op without delay.</span>
+
+<span class="sd">    Every target the policy issues (position, velocity, effort) travels the same</span>
+<span class="sd">    command channel and experiences the same latency, so they are stacked and</span>
+<span class="sd">    delayed together. Feedback fields (``pos``, ``vel``) are never delayed.</span>
+<span class="sd">    &quot;&quot;&quot;</span>
     <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
       <span class="k">return</span> <span class="n">cmd</span>
-    <span class="n">cf</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">command_field</span>
-    <span class="k">if</span> <span class="n">cf</span> <span class="o">==</span> <span class="s2">&quot;position&quot;</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">position_target</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">position_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span>
-    <span class="k">elif</span> <span class="n">cf</span> <span class="o">==</span> <span class="s2">&quot;velocity&quot;</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">velocity_target</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">velocity_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span>
-    <span class="k">else</span><span class="p">:</span>
-      <span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">effort_target</span><span class="p">)</span>
-      <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span><span class="n">cmd</span><span class="p">,</span> <span class="n">effort_target</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span><span class="o">.</span><span class="n">compute</span><span class="p">())</span></div>
+    <span class="n">targets</span> <span class="o">=</span> <span class="n">torch</span><span class="o">.</span><span class="n">stack</span><span class="p">(</span>
+      <span class="p">(</span><span class="n">cmd</span><span class="o">.</span><span class="n">position_target</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">velocity_target</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">effort_target</span><span class="p">),</span> <span class="n">dim</span><span class="o">=-</span><span class="mi">1</span>
+    <span class="p">)</span>
+    <span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">targets</span><span class="p">)</span>
+    <span class="n">delayed</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">_delay_buffer</span><span class="o">.</span><span class="n">compute</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">dataclasses</span><span class="o">.</span><span class="n">replace</span><span class="p">(</span>
+      <span class="n">cmd</span><span class="p">,</span>
+      <span class="n">position_target</span><span class="o">=</span><span class="n">delayed</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">0</span><span class="p">],</span>
+      <span class="n">velocity_target</span><span class="o">=</span><span class="n">delayed</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">1</span><span class="p">],</span>
+      <span class="n">effort_target</span><span class="o">=</span><span class="n">delayed</span><span class="p">[</span><span class="o">...</span><span class="p">,</span> <span class="mi">2</span><span class="p">],</span>
+    <span class="p">)</span></div>
 
 
 <div class="viewcode-block" id="Actuator.set_lags">

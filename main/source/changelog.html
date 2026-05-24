@@ -612,6 +612,10 @@ The renderer recomputed its context “neighbor” robots every frame from
 <code class="docutils literal notranslate"><span class="pre">env_origins</span></code>, which the terrain curriculum mutates on reset, so the
 neighbor set kept changing and robots popped in and out. The neighbor
 set is now computed once and cached (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/979">#979</a>).</p></li>
+<li><p>Fixed command delay only applying to an actuator’s position target.
+<code class="docutils literal notranslate"><span class="pre">IdealPdActuator</span></code> and <code class="docutils literal notranslate"><span class="pre">DcMotorActuator</span></code> also use velocity and effort, which
+arrived undelayed and out of sync; all command targets now share one delay.
+Zero-reference setups are unaffected.</p></li>
 <li><p>Fixed duplicate random seeds across nodes in multi-node training. The
 per-process seed offset in <code class="docutils literal notranslate"><span class="pre">scripts/train.py</span></code> now uses the global
 <code class="docutils literal notranslate"><span class="pre">RANK</span></code> instead of <code class="docutils literal notranslate"><span class="pre">LOCAL_RANK</span></code>. Contribution by &#64;bd-pdomanico.</p></li>

@@ -516,6 +516,12 @@ document.write(`
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">mdp.projected_gravity_from_sensor</span></code>, an observation that derives
+projected gravity from a <code class="docutils literal notranslate"><span class="pre">framezaxis</span></code> up-vector sensor (negated) rather
+than from the root body orientation. Unlike <code class="docutils literal notranslate"><span class="pre">mdp.projected_gravity</span></code>, it
+reflects the sensor’s site frame, so it can observe IMU mounting domain
+randomization (e.g. via <code class="docutils literal notranslate"><span class="pre">dr.site_quat</span></code>). Go1 and G1 ship an
+<code class="docutils literal notranslate"><span class="pre">imu_upvector</span></code> sensor for this.</p></li>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">DebugVisualizer.add_box</span></code> for drawing an axis-oriented box
 primitive, mirroring <code class="docutils literal notranslate"><span class="pre">add_ellipsoid</span></code>. Supported by both the native
 and Viser viewers. <code class="docutils literal notranslate"><span class="pre">size</span></code> is the box half-extents (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/992">#992</a>).</p></li>

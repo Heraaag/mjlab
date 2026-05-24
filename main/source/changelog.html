@@ -588,6 +588,14 @@ Contribution by &#64;saikishor.</p></li>
 air-time fields (<code class="docutils literal notranslate"><span class="pre">current_air_time</span></code>, <code class="docutils literal notranslate"><span class="pre">last_air_time</span></code>,
 <code class="docutils literal notranslate"><span class="pre">current_contact_time</span></code>, <code class="docutils literal notranslate"><span class="pre">last_contact_time</span></code>) have shape <code class="docutils literal notranslate"><span class="pre">[B,</span> <span class="pre">P]</span></code>,
 where <code class="docutils literal notranslate"><span class="pre">P</span></code> is the number of resolved primaries (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/914">#914</a>).</p></li>
+<li><p>Event functions now share a single <code class="docutils literal notranslate"><span class="pre">resolve_env_ids</span></code> helper to expand
+<code class="docutils literal notranslate"><span class="pre">env_ids=None</span></code> to all environments, replacing five copies of the same
+guard. <code class="docutils literal notranslate"><span class="pre">push_by_setting_velocity</span></code> and <code class="docutils literal notranslate"><span class="pre">apply_external_force_torque</span></code>
+accept <code class="docutils literal notranslate"><span class="pre">env_ids=None</span></code> too, so they work as global-time interval terms.
+Documented when to use <code class="docutils literal notranslate"><span class="pre">apply_external_force_torque</span></code> (a constant,
+self-managed wrench) versus <code class="docutils literal notranslate"><span class="pre">apply_body_impulse</span></code> (transient, automatic
+impulses) versus <code class="docutils literal notranslate"><span class="pre">push_by_setting_velocity</span></code> (an instantaneous velocity
+kick).</p></li>
 </ul>
 </section>
 <section id="fixed">

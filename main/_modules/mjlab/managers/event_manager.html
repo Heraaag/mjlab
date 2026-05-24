@@ -711,9 +711,12 @@ document.write(`
         <span class="n">fired</span> <span class="o">=</span> <span class="kc">True</span>
       <span class="k">elif</span> <span class="n">mode</span> <span class="o">==</span> <span class="s2">&quot;reset&quot;</span><span class="p">:</span>
         <span class="k">assert</span> <span class="n">global_env_step_count</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span>
+        <span class="c1"># Reset events require concrete indices: callers (e.g. ManagerBasedRlEnv)</span>
+        <span class="c1"># resolve None to all environments upstream. Enforce that here so a future</span>
+        <span class="c1"># caller passing None fails loudly instead of leaking a slice into event</span>
+        <span class="c1"># functions, which only understand None or a tensor.</span>
+        <span class="k">assert</span> <span class="n">env_ids</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">,</span> <span class="s2">&quot;reset events require concrete env_ids, got None&quot;</span>
         <span class="n">min_step_count</span> <span class="o">=</span> <span class="n">term_cfg</span><span class="o">.</span><span class="n">min_step_count_between_reset</span>
-        <span class="k">if</span> <span class="n">env_ids</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
-          <span class="n">env_ids</span> <span class="o">=</span> <span class="nb">slice</span><span class="p">(</span><span class="kc">None</span><span class="p">)</span>
         <span class="k">if</span> <span class="n">min_step_count</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
           <span class="bp">self</span><span class="o">.</span><span class="n">_reset_term_last_triggered_step_id</span><span class="p">[</span><span class="n">index</span><span class="p">][</span><span class="n">env_ids</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span>
             <span class="n">global_env_step_count</span>

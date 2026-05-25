@@ -563,6 +563,12 @@ Contribution by &#64;omarrayyann.</p></li>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p><code class="docutils literal notranslate"><span class="pre">Entity</span></code> now raises a clear error at construction when its spec contains
+more than one freejoint. An entity models a single system rooted at one
+body, so it has at most one freejoint; a second one was previously accepted
+silently and only surfaced later as a cryptic shape mismatch when writing
+root state. Model each detached floating body as its own entry in
+<code class="docutils literal notranslate"><span class="pre">SceneCfg.entities</span></code> instead.</p></li>
 <li><p>Changed <code class="docutils literal notranslate"><span class="pre">compute_root_relative_mpkpe</span></code> to re-anchor the reference to the
 robot’s root each step, removing yaw drift as well as translation so it
 measures intrinsic body pose error.</p></li>

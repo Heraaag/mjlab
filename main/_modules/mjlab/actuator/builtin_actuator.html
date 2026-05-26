@@ -56,7 +56,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="May 25, 2026"/>
+    <meta name="docbuild:last-update" content="May 26, 2026"/>
   </head>
   
   
@@ -417,6 +417,7 @@ document.write(`
 <span class="kn">from</span><span class="w"> </span><span class="nn">typing</span><span class="w"> </span><span class="kn">import</span> <span class="n">TYPE_CHECKING</span>
 
 <span class="kn">import</span><span class="w"> </span><span class="nn">mujoco</span>
+<span class="kn">import</span><span class="w"> </span><span class="nn">numpy</span><span class="w"> </span><span class="k">as</span><span class="w"> </span><span class="nn">np</span>
 <span class="kn">import</span><span class="w"> </span><span class="nn">torch</span>
 
 <span class="kn">from</span><span class="w"> </span><span class="nn">mjlab.actuator.actuator</span><span class="w"> </span><span class="kn">import</span> <span class="p">(</span>
@@ -514,6 +515,102 @@ document.write(`
     <span class="k">return</span> <span class="n">cmd</span><span class="o">.</span><span class="n">position_target</span></div>
 </div>
 
+
+
+<span class="nd">@dataclass</span><span class="p">(</span><span class="n">kw_only</span><span class="o">=</span><span class="kc">True</span><span class="p">)</span>
+<span class="k">class</span><span class="w"> </span><span class="nc">BuiltinPdActuatorCfg</span><span class="p">(</span><span class="n">ActuatorCfg</span><span class="p">):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Implicit-integration version of ``IdealPdActuator``.</span>
+
+<span class="sd">  Both consume a position target and a velocity target with kp/kd gains.</span>
+<span class="sd">  The difference is in how the PD is delivered to MuJoCo: ``IdealPdActuator`` computes</span>
+<span class="sd">  the PD force in Python and feeds it to a ``&lt;motor&gt;`` element, which MuJoCo sees as an</span>
+<span class="sd">  opaque external force. This actuator expresses the PD as native MuJoCo elements (a</span>
+<span class="sd">  ``&lt;position&gt;`` carrying kp, a ``&lt;velocity&gt;`` carrying kd), so the ``implicit`` and</span>
+<span class="sd">  ``implicitfast`` integrators include the kp/kd derivatives in their velocity update.</span>
+<span class="sd">  That makes the actuator numerically stable at gain/timestep combinations where</span>
+<span class="sd">  explicit Python PD would diverge, which matters when you want to run a real motor&#39;s</span>
+<span class="sd">  stiff on-board PD gains in sim.</span>
+<span class="sd">  &quot;&quot;&quot;</span>
+
+  <span class="n">stiffness</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Proportional gain (kp).&quot;&quot;&quot;</span>
+  <span class="n">damping</span><span class="p">:</span> <span class="nb">float</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Derivative gain (kd).&quot;&quot;&quot;</span>
+  <span class="n">effort_limit</span><span class="p">:</span> <span class="nb">float</span> <span class="o">|</span> <span class="kc">None</span> <span class="o">=</span> <span class="kc">None</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;Maximum total torque applied to the joint or tendon. Enforced as a</span>
+<span class="sd">  sum-clamp on the two PD terms via jnt_actfrcrange (JOINT) or</span>
+<span class="sd">  tendon_actfrcrange (TENDON). None leaves the limit unset.&quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">__post_init__</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="n">__post_init__</span><span class="p">()</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">transmission_type</span> <span class="o">==</span> <span class="n">TransmissionType</span><span class="o">.</span><span class="n">SITE</span><span class="p">:</span>
+      <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span>
+        <span class="s2">&quot;BuiltinPdActuatorCfg does not support SITE transmission. &quot;</span>
+        <span class="s2">&quot;Use BuiltinMotorActuatorCfg for site transmission.&quot;</span>
+      <span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">build</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span> <span class="n">target_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span> <span class="n">target_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">]</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="n">BuiltinPdActuator</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">BuiltinPdActuator</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">target_ids</span><span class="p">,</span> <span class="n">target_names</span><span class="p">)</span>
+
+
+<span class="k">class</span><span class="w"> </span><span class="nc">BuiltinPdActuator</span><span class="p">(</span><span class="n">Actuator</span><span class="p">[</span><span class="n">BuiltinPdActuatorCfg</span><span class="p">]):</span>
+<span class="w">  </span><span class="sd">&quot;&quot;&quot;MuJoCo native PD: paired &lt;position&gt; + &lt;velocity&gt; elements per target.&quot;&quot;&quot;</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="fm">__init__</span><span class="p">(</span>
+    <span class="bp">self</span><span class="p">,</span>
+    <span class="n">cfg</span><span class="p">:</span> <span class="n">BuiltinPdActuatorCfg</span><span class="p">,</span>
+    <span class="n">entity</span><span class="p">:</span> <span class="n">Entity</span><span class="p">,</span>
+    <span class="n">target_ids</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">int</span><span class="p">],</span>
+    <span class="n">target_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">],</span>
+  <span class="p">)</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="nb">super</span><span class="p">()</span><span class="o">.</span><span class="fm">__init__</span><span class="p">(</span><span class="n">cfg</span><span class="p">,</span> <span class="n">entity</span><span class="p">,</span> <span class="n">target_ids</span><span class="p">,</span> <span class="n">target_names</span><span class="p">)</span>
+
+  <span class="nd">@property</span>
+  <span class="k">def</span><span class="w"> </span><span class="nf">num_targets</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;Number of targets. ``ctrl_ids`` is laid out as ``[pos..., vel...]``,</span>
+<span class="sd">    each block of length ``num_targets``.&quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="nb">len</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">_target_ids_list</span><span class="p">)</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">edit_spec</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">spec</span><span class="p">:</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">MjSpec</span><span class="p">,</span> <span class="n">target_names</span><span class="p">:</span> <span class="nb">list</span><span class="p">[</span><span class="nb">str</span><span class="p">])</span> <span class="o">-&gt;</span> <span class="kc">None</span><span class="p">:</span>
+    <span class="c1"># Position elements first, then velocity elements, so ctrl_ids is laid out</span>
+    <span class="c1"># as [pos_0..pos_{N-1}, vel_0..vel_{N-1}].</span>
+    <span class="k">for</span> <span class="n">target_name</span> <span class="ow">in</span> <span class="n">target_names</span><span class="p">:</span>
+      <span class="n">pos_act</span> <span class="o">=</span> <span class="n">create_position_actuator</span><span class="p">(</span>
+        <span class="n">spec</span><span class="p">,</span>
+        <span class="n">target_name</span><span class="p">,</span>
+        <span class="n">actuator_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_name</span><span class="si">}</span><span class="s2">_pd_pos&quot;</span><span class="p">,</span>
+        <span class="n">stiffness</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">stiffness</span><span class="p">,</span>
+        <span class="n">damping</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span>  <span class="c1"># damping lives on the &lt;velocity&gt; element.</span>
+        <span class="n">armature</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">armature</span><span class="p">,</span>
+        <span class="n">frictionloss</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">frictionloss</span><span class="p">,</span>
+        <span class="n">viscous_damping</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">viscous_damping</span><span class="p">,</span>
+        <span class="n">transmission_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">transmission_type</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_mjs_actuators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">pos_act</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">target_name</span> <span class="ow">in</span> <span class="n">target_names</span><span class="p">:</span>
+      <span class="n">vel_act</span> <span class="o">=</span> <span class="n">create_velocity_actuator</span><span class="p">(</span>
+        <span class="n">spec</span><span class="p">,</span>
+        <span class="n">target_name</span><span class="p">,</span>
+        <span class="n">actuator_name</span><span class="o">=</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">target_name</span><span class="si">}</span><span class="s2">_pd_vel&quot;</span><span class="p">,</span>
+        <span class="n">damping</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">damping</span><span class="p">,</span>
+        <span class="n">transmission_type</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">transmission_type</span><span class="p">,</span>
+      <span class="p">)</span>
+      <span class="bp">self</span><span class="o">.</span><span class="n">_mjs_actuators</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">vel_act</span><span class="p">)</span>
+    <span class="c1"># Effort limit: sum-clamp on the joint/tendon, not on each element.</span>
+    <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">effort_limit</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+      <span class="n">lim</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">effort_limit</span>
+      <span class="k">for</span> <span class="n">target_name</span> <span class="ow">in</span> <span class="n">target_names</span><span class="p">:</span>
+        <span class="k">if</span> <span class="bp">self</span><span class="o">.</span><span class="n">cfg</span><span class="o">.</span><span class="n">transmission_type</span> <span class="o">==</span> <span class="n">TransmissionType</span><span class="o">.</span><span class="n">JOINT</span><span class="p">:</span>
+          <span class="n">target</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">joint</span><span class="p">(</span><span class="n">target_name</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+          <span class="n">target</span> <span class="o">=</span> <span class="n">spec</span><span class="o">.</span><span class="n">tendon</span><span class="p">(</span><span class="n">target_name</span><span class="p">)</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">actfrclimited</span> <span class="o">=</span> <span class="n">mujoco</span><span class="o">.</span><span class="n">mjtLimited</span><span class="o">.</span><span class="n">mjLIMITED_TRUE</span>
+        <span class="n">target</span><span class="o">.</span><span class="n">actfrcrange</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">lim</span><span class="p">,</span> <span class="n">lim</span><span class="p">])</span>
+
+  <span class="k">def</span><span class="w"> </span><span class="nf">compute</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">cmd</span><span class="p">:</span> <span class="n">ActuatorCmd</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="n">torch</span><span class="o">.</span><span class="n">Tensor</span><span class="p">:</span>
+    <span class="k">return</span> <span class="n">torch</span><span class="o">.</span><span class="n">cat</span><span class="p">((</span><span class="n">cmd</span><span class="o">.</span><span class="n">position_target</span><span class="p">,</span> <span class="n">cmd</span><span class="o">.</span><span class="n">velocity_target</span><span class="p">),</span> <span class="n">dim</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
 
 
 <div class="viewcode-block" id="BuiltinMotorActuatorCfg">
@@ -806,7 +903,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 25, 2026.
+  Last updated on May 26, 2026.
   <br/>
 </p>
   </div>

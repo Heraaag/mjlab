@@ -58,7 +58,7 @@
     <link rel="prev" title="Research" href="research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="May 25, 2026"/>
+    <meta name="docbuild:last-update" content="May 26, 2026"/>
   </head>
   
   
@@ -516,6 +516,17 @@ document.write(`
 <section id="added">
 <h3>Added<a class="headerlink" href="#added" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Added <code class="docutils literal notranslate"><span class="pre">BuiltinPdActuator</span></code>, the implicit-integration version of
+<code class="docutils literal notranslate"><span class="pre">IdealPdActuator</span></code>. Same interface (position + velocity targets,
+kp/kd gains), but expresses the PD as native MuJoCo <code class="docutils literal notranslate"><span class="pre">&lt;position&gt;</span></code>
+and <code class="docutils literal notranslate"><span class="pre">&lt;velocity&gt;</span></code> elements so the <code class="docutils literal notranslate"><span class="pre">implicit</span></code> / <code class="docutils literal notranslate"><span class="pre">implicitfast</span></code>
+integrators include the kp/kd derivatives in their velocity update.
+The actuator stays stable at gain/timestep combinations where
+explicit Python PD would diverge, which matters when you want to
+run a real motor’s stiff on-board PD gains in sim. <code class="docutils literal notranslate"><span class="pre">effort_limit</span></code>
+is enforced as a sum-clamp on the two PD terms via
+<code class="docutils literal notranslate"><span class="pre">jnt_actfrcrange</span></code> (or <code class="docutils literal notranslate"><span class="pre">tendon_actfrcrange</span></code>). Supported by
+<code class="docutils literal notranslate"><span class="pre">dr.pd_gains</span></code> and <code class="docutils literal notranslate"><span class="pre">dr.effort_limits</span></code>.</p></li>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">mdp.projected_gravity_from_sensor</span></code>, an observation that derives
 projected gravity from a <code class="docutils literal notranslate"><span class="pre">framezaxis</span></code> up-vector sensor (negated) rather
 than from the root body orientation. Unlike <code class="docutils literal notranslate"><span class="pre">mdp.projected_gravity</span></code>, it
@@ -1293,7 +1304,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 25, 2026.
+  Last updated on May 26, 2026.
   <br/>
 </p>
   </div>

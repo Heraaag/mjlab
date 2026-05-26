@@ -1948,5 +1948,20 @@
       "ee_pos_error": 0.044988974928855896,
       "ee_ori_error": 0.16809168457984924
     }
+  },
+  {
+    "id": "dsaxkmzv",
+    "name": "2026-05-26_02-18-05",
+    "url": "https://wandb.ai/gcbc_researchers/mjlab/runs/dsaxkmzv",
+    "created_at": "2026-05-26T09:18:10Z",
+    "commit": "feefdd7",
+    "metrics": {
+      "success_rate": 0.962890625,
+      "mpkpe": 0.10851046442985535,
+      "r_mpkpe": 0.030179601162672043,
+      "joint_vel_error": 0.5608025789260864,
+      "ee_pos_error": 0.0462997630238533,
+      "ee_ori_error": 0.17022159695625305
+    }
   }
 ]

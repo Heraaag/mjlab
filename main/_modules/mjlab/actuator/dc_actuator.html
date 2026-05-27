@@ -56,7 +56,7 @@
     <link rel="search" title="Search" href="../../../search.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="May 26, 2026"/>
+    <meta name="docbuild:last-update" content="May 27, 2026"/>
   </head>
   
   
@@ -443,6 +443,9 @@ document.write(`
 <span class="sd">  Note: effort_limit should be explicitly set to a realistic value for proper</span>
 <span class="sd">  motor modeling. Using the default (inf) will trigger a warning. Use</span>
 <span class="sd">  IdealPdActuator if unlimited torque is desired.</span>
+
+<span class="sd">  For a native MuJoCo ``&lt;dcmotor&gt;`` with back-EMF, voltage saturation, and</span>
+<span class="sd">  configurable ``Kt`` / ``Ke`` / ``R``, see ``BuiltinDcMotorActuator``.</span>
 <span class="sd">  &quot;&quot;&quot;</span>
 
   <span class="n">saturation_effort</span><span class="p">:</span> <span class="nb">float</span>
@@ -634,7 +637,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 26, 2026.
+  Last updated on May 27, 2026.
   <br/>
 </p>
   </div>

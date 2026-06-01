@@ -59,7 +59,7 @@
     <link rel="prev" title="mjlab.managers" href="managers.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="May 30, 2026"/>
+    <meta name="docbuild:last-update" content="Jun 01, 2026"/>
   </head>
   
   
@@ -564,6 +564,7 @@ document.write(`
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.vertical_scale"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.vertical_scale</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.base_thickness_ratio"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.base_thickness_ratio</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.border_width"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.border_width</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.scale_with_difficulty"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.scale_with_difficulty</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.function"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.function()</span></code></a></li>
 </ul>
 </li>
@@ -1261,6 +1262,15 @@ meters. If None, uses horizontal_scale. Must be &gt;= horizontal_scale.</p>
 horizontal_scale if non-zero.</p>
 </dd></dl>
 
+<dl class="py attribute">
+<dt class="sig sig-object py" id="mjlab.terrains.HfRandomUniformTerrainCfg.scale_with_difficulty">
+<span class="sig-name descname"><span class="pre">scale_with_difficulty</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#bool" title="(in Python v3.14)"><span class="pre">bool</span></a></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">False</span></em><a class="headerlink" href="#mjlab.terrains.HfRandomUniformTerrainCfg.scale_with_difficulty" title="Link to this definition">#</a></dt>
+<dd><p>If False (default), the roughness is fixed and <code class="docutils literal notranslate"><span class="pre">difficulty</span></code> is ignored,
+matching upstream behavior. If True, the noise amplitude scales linearly with
+difficulty (flat at 0, full <code class="docutils literal notranslate"><span class="pre">noise_range</span></code> at 1) so the terrain progresses in
+a curriculum.</p>
+</dd></dl>
+
 <dl class="py method">
 <dt class="sig sig-object py" id="mjlab.terrains.HfRandomUniformTerrainCfg.function">
 <span class="sig-name descname"><span class="pre">function</span></span><span class="sig-paren">(</span><em class="sig-param"><span class="n"><span class="pre">difficulty</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a></span></em>, <em class="sig-param"><span class="n"><span class="pre">spec</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">MjSpec</span></span></em>, <em class="sig-param"><span class="n"><span class="pre">rng</span></span><span class="p"><span class="pre">:</span></span><span class="w"> </span><span class="n"><span class="pre">Generator</span></span></em><span class="sig-paren">)</span> <span class="sig-return"><span class="sig-return-icon">&#x2192;</span> <span class="sig-return-typehint"><span class="pre">TerrainOutput</span></span></span><a class="reference internal" href="../../_modules/mjlab/terrains/heightfield_terrains.html#HfRandomUniformTerrainCfg.function"><span class="viewcode-link"><span class="pre">[source]</span></span></a><a class="headerlink" href="#mjlab.terrains.HfRandomUniformTerrainCfg.function" title="Link to this definition">#</a></dt>
@@ -1499,7 +1509,9 @@ horizontal_scale if non-zero.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mjlab.terrains.BoxNestedRingsTerrainCfg.height_range">
 <span class="sig-name descname"><span class="pre">height_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0.1,</span> <span class="pre">0.4)</span></em><a class="headerlink" href="#mjlab.terrains.BoxNestedRingsTerrainCfg.height_range" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Min and max ring height, in meters. All rings share a single fixed height
+taken as the midpoint of this range; difficulty does not scale it.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mjlab.terrains.BoxNestedRingsTerrainCfg.platform_width">
@@ -1793,12 +1805,17 @@ to reduce geom count.</p>
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mjlab.terrains.BoxSteppingStonesTerrainCfg.stone_size_range">
 <span class="sig-name descname"><span class="pre">stone_size_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0.4,</span> <span class="pre">0.8)</span></em><a class="headerlink" href="#mjlab.terrains.BoxSteppingStonesTerrainCfg.stone_size_range" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Max and min stone side length, in meters. Stones shrink from the max toward
+the min as difficulty increases, which widens the gaps between them.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mjlab.terrains.BoxSteppingStonesTerrainCfg.stone_distance_range">
 <span class="sig-name descname"><span class="pre">stone_distance_range</span></span><em class="property"><span class="p"><span class="pre">:</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/stdtypes.html#tuple" title="(in Python v3.14)"><span class="pre">tuple</span></a><span class="p"><span class="pre">[</span></span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">,</span></span><span class="w"> </span><a class="reference external" href="https://docs.python.org/3/library/functions.html#float" title="(in Python v3.14)"><span class="pre">float</span></a><span class="p"><span class="pre">]</span></span></em><em class="property"><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="pre">(0.2,</span> <span class="pre">0.5)</span></em><a class="headerlink" href="#mjlab.terrains.BoxSteppingStonesTerrainCfg.stone_distance_range" title="Link to this definition">#</a></dt>
-<dd></dd></dl>
+<dd><p>Gap between stones, in meters. The lower bound seeds the (fixed) grid
+density; the gap itself grows with difficulty as the stones shrink, so the
+upper bound is no longer used directly.</p>
+</dd></dl>
 
 <dl class="py attribute">
 <dt class="sig sig-object py" id="mjlab.terrains.BoxSteppingStonesTerrainCfg.stone_height">
@@ -2038,6 +2055,7 @@ to reduce geom count.</p>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.vertical_scale"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.vertical_scale</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.base_thickness_ratio"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.base_thickness_ratio</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.border_width"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.border_width</span></code></a></li>
+<li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.scale_with_difficulty"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.scale_with_difficulty</span></code></a></li>
 <li class="toc-h4 nav-item toc-entry"><a class="reference internal nav-link" href="#mjlab.terrains.HfRandomUniformTerrainCfg.function"><code class="docutils literal notranslate"><span class="pre">HfRandomUniformTerrainCfg.function()</span></code></a></li>
 </ul>
 </li>
@@ -2204,7 +2222,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on May 30, 2026.
+  Last updated on Jun 01, 2026.
   <br/>
 </p>
   </div>

@@ -2023,5 +2023,20 @@
       "ee_pos_error": 0.047594912350177765,
       "ee_ori_error": 0.17034611105918884
     }
+  },
+  {
+    "id": "teheo8pv",
+    "name": "2026-06-02_02-30-06",
+    "url": "https://wandb.ai/gcbc_researchers/mjlab/runs/teheo8pv",
+    "created_at": "2026-06-02T09:30:11Z",
+    "commit": "40f8d93",
+    "metrics": {
+      "success_rate": 0.986328125,
+      "mpkpe": 0.10521923750638962,
+      "r_mpkpe": 0.029685113579034805,
+      "joint_vel_error": 0.5547971725463867,
+      "ee_pos_error": 0.04571272432804108,
+      "ee_ori_error": 0.17123788595199585
+    }
   }
 ]

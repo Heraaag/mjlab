@@ -58,7 +58,7 @@
     <link rel="prev" title="Research" href="research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Jun 01, 2026"/>
+    <meta name="docbuild:last-update" content="Jun 04, 2026"/>
   </head>
   
   
@@ -555,6 +555,10 @@ border matches the ring height.</p></li>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fixed domain randomization events that target different <code class="docutils literal notranslate"><span class="pre">axes</span></code> of the same
+model field (e.g. two <code class="docutils literal notranslate"><span class="pre">dr.geom_size</span></code> events scaling axis 0 and axis 1
+separately) silently clobbering each other. Each event now writes back only
+the axes it targeted, so per-axis events compose (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1042">#1042</a>).</p></li>
 <li><p>Fixed <code class="docutils literal notranslate"><span class="pre">select_gpus</span></code> crashing when <code class="docutils literal notranslate"><span class="pre">CUDA_VISIBLE_DEVICES</span></code> contains MIG UUIDs instead of numeric indices.</p></li>
 <li><p>Fixed pyramid-stairs terrains (<code class="docutils literal notranslate"><span class="pre">BoxPyramidStairsTerrainCfg</span></code>,
 <code class="docutils literal notranslate"><span class="pre">BoxInvertedPyramidStairsTerrainCfg</span></code>, and <code class="docutils literal notranslate"><span class="pre">BoxOpenStairsTerrainCfg</span></code>)
@@ -1389,7 +1393,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jun 01, 2026.
+  Last updated on Jun 04, 2026.
   <br/>
 </p>
   </div>

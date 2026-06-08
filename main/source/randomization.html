@@ -61,7 +61,7 @@
     <link rel="prev" title="Events" href="events.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Jun 05, 2026"/>
+    <meta name="docbuild:last-update" content="Jun 08, 2026"/>
   </head>
   
   
@@ -830,6 +830,26 @@ triggers <code class="docutils literal notranslate"><span class="pre">set_const_
 <td><p>Material RGBA color (tints textures)</p></td>
 <td></td>
 </tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dr.mat_emission</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mat_emission</span></code></p></td>
+<td><p>Self-illumination multiplier</p></td>
+<td><p>Used by MuJoCo Warp RGB rendering</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dr.mat_specular</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mat_specular</span></code></p></td>
+<td><p>Specular reflection strength in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code></p></td>
+<td><p>Scales the MuJoCo Warp RGB specular component</p></td>
+</tr>
+<tr class="row-odd"><td><p><code class="docutils literal notranslate"><span class="pre">dr.mat_shininess</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mat_shininess</span></code></p></td>
+<td><p>Surface shininess in <code class="docutils literal notranslate"><span class="pre">[0,</span> <span class="pre">1]</span></code></p></td>
+<td><p>Used by MuJoCo Warp RGB rendering</p></td>
+</tr>
+<tr class="row-even"><td><p><code class="docutils literal notranslate"><span class="pre">dr.mat_texrepeat</span></code></p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">mat_texrepeat</span></code></p></td>
+<td><p>Texture repeat in the S/T directions</p></td>
+<td><p>Only affects textured materials; values should stay positive</p></td>
+</tr>
 </tbody>
 </table>
 </div>
@@ -1409,12 +1429,6 @@ do not have one yet. They will be added as demand arises.</p>
 <code class="docutils literal notranslate"><span class="pre">actuator_ctrlrange</span></code>, <code class="docutils literal notranslate"><span class="pre">actuator_actrange</span></code></p></td>
 <td><p><code class="docutils literal notranslate"><span class="pre">pd_gains</span></code> and <code class="docutils literal notranslate"><span class="pre">effort_limits</span></code> cover common cases.</p></td>
 </tr>
-<tr class="row-even"><td><p>Material</p></td>
-<td><p><code class="docutils literal notranslate"><span class="pre">mat_texrepeat</span></code></p></td>
-<td><p>Continuous per-world field. Material-level entity indexing
-is now supported (see <code class="docutils literal notranslate"><span class="pre">dr.mat_rgba</span></code>), but <code class="docutils literal notranslate"><span class="pre">dr.mat_texrepeat</span></code>
-is not yet implemented.</p></td>
-</tr>
 </tbody>
 </table>
 </div>
@@ -1975,7 +1989,8 @@ logic:</p>
 toggles then work correctly against the randomized model:</p>
 <ul class="simple">
 <li><p>Geom appearance (<code class="docutils literal notranslate"><span class="pre">geom_rgba</span></code>, <code class="docutils literal notranslate"><span class="pre">geom_size</span></code>, <code class="docutils literal notranslate"><span class="pre">geom_pos</span></code>, <code class="docutils literal notranslate"><span class="pre">geom_quat</span></code>)</p></li>
-<li><p>Material color (<code class="docutils literal notranslate"><span class="pre">mat_rgba</span></code>): tints textured surfaces</p></li>
+<li><p>Material appearance (<code class="docutils literal notranslate"><span class="pre">mat_rgba</span></code>, <code class="docutils literal notranslate"><span class="pre">mat_emission</span></code>, <code class="docutils literal notranslate"><span class="pre">mat_specular</span></code>,
+<code class="docutils literal notranslate"><span class="pre">mat_shininess</span></code>, <code class="docutils literal notranslate"><span class="pre">mat_texrepeat</span></code>)</p></li>
 <li><p>Body and site poses (<code class="docutils literal notranslate"><span class="pre">body_pos</span></code>, <code class="docutils literal notranslate"><span class="pre">body_quat</span></code>, <code class="docutils literal notranslate"><span class="pre">body_ipos</span></code>,
 <code class="docutils literal notranslate"><span class="pre">site_pos</span></code>, <code class="docutils literal notranslate"><span class="pre">site_quat</span></code>)</p></li>
 <li><p>Inertia (<code class="docutils literal notranslate"><span class="pre">body_inertia</span></code>, <code class="docutils literal notranslate"><span class="pre">body_iquat</span></code>, <code class="docutils literal notranslate"><span class="pre">body_mass</span></code>): press <code class="docutils literal notranslate"><span class="pre">I</span></code>
@@ -2171,7 +2186,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jun 05, 2026.
+  Last updated on Jun 08, 2026.
   <br/>
 </p>
   </div>

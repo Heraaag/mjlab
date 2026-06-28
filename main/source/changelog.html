@@ -58,7 +58,7 @@
     <link rel="prev" title="Research" href="research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Jun 18, 2026"/>
+    <meta name="docbuild:last-update" content="Jun 28, 2026"/>
   </head>
   
   
@@ -540,8 +540,18 @@ enabled, the noise amplitude scales with difficulty (flat at 0, full
 </section>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
-<ul class="simple">
+<ul>
 <li><p>Bumped <code class="docutils literal notranslate"><span class="pre">rsl-rl-lib</span></code> from 5.2.0 to 5.4.0.</p></li>
+<li><p>Bumped <code class="docutils literal notranslate"><span class="pre">mujoco</span></code> and <code class="docutils literal notranslate"><span class="pre">mujoco-warp</span></code> to 3.10, both pinned from PyPI. The
+<code class="docutils literal notranslate"><span class="pre">py.mujoco.org</span></code> nightly index and the <code class="docutils literal notranslate"><span class="pre">mujoco-warp</span></code> git pin are dropped, so
+resolution no longer breaks when nightly wheels are garbage-collected.</p>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p><code class="docutils literal notranslate"><span class="pre">SimulationCfg.ls_parallel</span></code> is deprecated and now ignored, since parallel
+linesearch was removed upstream in MuJoCo Warp. Setting it emits a
+<code class="docutils literal notranslate"><span class="pre">DeprecationWarning</span></code>; remove it from any <code class="docutils literal notranslate"><span class="pre">SimulationCfg</span></code> you construct.</p>
+</div>
+</li>
 <li><p>Curriculum-mode terrain difficulty is now deterministic across rows
 and reaches the configured <code class="docutils literal notranslate"><span class="pre">difficulty_range</span></code> endpoints
 (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1027">#1027</a>).</p></li>
@@ -1402,7 +1412,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jun 18, 2026.
+  Last updated on Jun 28, 2026.
   <br/>
 </p>
   </div>

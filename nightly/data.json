@@ -2413,5 +2413,20 @@
       "ee_pos_error": 0.04845201224088669,
       "ee_ori_error": 0.17267151176929474
     }
+  },
+  {
+    "id": "uvqfysm7",
+    "name": "2026-06-28_02-17-13",
+    "url": "https://wandb.ai/gcbc_researchers/mjlab/runs/uvqfysm7",
+    "created_at": "2026-06-28T09:17:18Z",
+    "commit": "efdcadc",
+    "metrics": {
+      "success_rate": 0.9609375,
+      "mpkpe": 0.12017548084259033,
+      "r_mpkpe": 0.032824527472257614,
+      "joint_vel_error": 0.5784965753555298,
+      "ee_pos_error": 0.05111457407474518,
+      "ee_ori_error": 0.1762925088405609
+    }
   }
 ]

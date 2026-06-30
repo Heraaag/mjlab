@@ -58,7 +58,7 @@
     <link rel="prev" title="Research" href="research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Jun 29, 2026"/>
+    <meta name="docbuild:last-update" content="Jun 30, 2026"/>
   </head>
   
   
@@ -540,6 +540,13 @@ caps the collision convex hull’s vertex count to lower narrowphase cost.</p></
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">mdp.bad_orientation</span></code> returning NaN when float32 rounding in
+<code class="docutils literal notranslate"><span class="pre">quat_apply_inverse</span></code> pushed the projected-gravity z-component slightly
+outside <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>, making <code class="docutils literal notranslate"><span class="pre">torch.acos</span></code> return NaN and silently
+suppressing the termination for flipped robots. The argument is now clamped
+to <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>.</p></li>
+</ul>
 </section>
 </section>
 <section id="version-1-5-0-june-28-2026">
@@ -1447,7 +1454,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jun 29, 2026.
+  Last updated on Jun 30, 2026.
   <br/>
 </p>
   </div>

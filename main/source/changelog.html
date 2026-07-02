@@ -540,6 +540,12 @@ bounding-volume filters.</p></li>
 </section>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Command delay on fusable actuators (ideal PD, DC motor) now applies one shared
+lag per environment across all fused actuators sharing a delay config, matching
+the built-in actuator path, rather than an independent lag per actuator group
+(<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1035">#1035</a>).</p></li>
+</ul>
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
@@ -549,6 +555,11 @@ bounding-volume filters.</p></li>
 outside <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>, making <code class="docutils literal notranslate"><span class="pre">torch.acos</span></code> return NaN and silently
 suppressing the termination for flipped robots. The argument is now clamped
 to <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>.</p></li>
+<li><p>Fixed a crash when using command delay on ideal PD (or other custom)
+actuators whenever <code class="docutils literal notranslate"><span class="pre">num_envs</span></code> differed from the number of delayed targets,
+and fused ideal PD and DC motor actuators sharing a transmission and delay
+config into a single gather, delay, control-law evaluation, and control
+write, removing per-group host overhead (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1035">#1035</a>).</p></li>
 </ul>
 </section>
 </section>

@@ -2518,5 +2518,20 @@
       "ee_pos_error": 0.04658643901348114,
       "ee_ori_error": 0.1691887378692627
     }
+  },
+  {
+    "id": "166brekg",
+    "name": "2026-07-08_02-12-41",
+    "url": "https://wandb.ai/gcbc_researchers/mjlab/runs/166brekg",
+    "created_at": "2026-07-08T09:12:46Z",
+    "commit": "6c0b6bf",
+    "metrics": {
+      "success_rate": 0.9873046875,
+      "mpkpe": 0.10413782298564911,
+      "r_mpkpe": 0.03072691708803177,
+      "joint_vel_error": 0.5556429624557495,
+      "ee_pos_error": 0.04752834886312485,
+      "ee_ori_error": 0.17675432562828064
+    }
   }
 ]

@@ -58,7 +58,7 @@
     <link rel="prev" title="Research" href="research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Jul 07, 2026"/>
+    <meta name="docbuild:last-update" content="Jul 15, 2026"/>
   </head>
   
   
@@ -551,6 +551,10 @@ the built-in actuator path, rather than an independent lag per actuator group
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">TorchArray</span></code> not expanding world-shared model fields to <code class="docutils literal notranslate"><span class="pre">nworld</span></code>
+with mujoco_warp 3.10.0.2, which allocates them as real size-1 arrays
+instead of stride-0 broadcast views. Multi-env indexing of fields like
+<code class="docutils literal notranslate"><span class="pre">soft_joint_pos_limits</span></code> raised <code class="docutils literal notranslate"><span class="pre">IndexError</span></code> during resets.</p></li>
 <li><p>Fixed <code class="docutils literal notranslate"><span class="pre">mdp.bad_orientation</span></code> returning NaN when float32 rounding in
 <code class="docutils literal notranslate"><span class="pre">quat_apply_inverse</span></code> pushed the projected-gravity z-component slightly
 outside <code class="docutils literal notranslate"><span class="pre">[-1,</span> <span class="pre">1]</span></code>, making <code class="docutils literal notranslate"><span class="pre">torch.acos</span></code> return NaN and silently
@@ -1471,7 +1475,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jul 07, 2026.
+  Last updated on Jul 15, 2026.
   <br/>
 </p>
   </div>

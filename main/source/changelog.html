@@ -782,6 +782,9 @@ kick).</p></li>
 <section id="id6">
 <h3>Fixed<a class="headerlink" href="#id6" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">TerrainGenerator</span></code> overwriting custom geom names set by sub-terrain
+functions with the default <code class="docutils literal notranslate"><span class="pre">terrain_{i}</span></code> name. Only unnamed geoms are now
+auto-named.</p></li>
 <li><p>Removed use of deprecated <code class="docutils literal notranslate"><span class="pre">warp-lang</span></code> symbols (<code class="docutils literal notranslate"><span class="pre">wp.context.runtime</span></code>
 and <code class="docutils literal notranslate"><span class="pre">wp.context.Device</span></code>) that were dropped in newer <code class="docutils literal notranslate"><span class="pre">warp-lang</span></code>
 releases, causing <code class="docutils literal notranslate"><span class="pre">AttributeError:</span> <span class="pre">module</span> <span class="pre">'warp'</span> <span class="pre">has</span> <span class="pre">no</span> <span class="pre">attribute</span>

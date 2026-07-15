@@ -542,6 +542,11 @@ document.write(`
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fixed CUDA illegal memory accesses when domain randomization triggers
+<code class="docutils literal notranslate"><span class="pre">set_const</span></code> with multiple environments. <code class="docutils literal notranslate"><span class="pre">actuator_acc0</span></code> is now expanded
+per environment before MuJoCo Warp recomputes it.</p></li>
+</ul>
 </section>
 </section>
 <section id="version-1-5-1-july-15-2026">

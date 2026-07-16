@@ -58,7 +58,7 @@
     <link rel="prev" title="Research" href="research.html" />
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <meta name="docsearch:language" content="en"/>
-    <meta name="docbuild:last-update" content="Jul 15, 2026"/>
+    <meta name="docbuild:last-update" content="Jul 16, 2026"/>
   </head>
   
   
@@ -546,6 +546,8 @@ document.write(`
 <li><p>Fixed CUDA illegal memory accesses when domain randomization triggers
 <code class="docutils literal notranslate"><span class="pre">set_const</span></code> with multiple environments. <code class="docutils literal notranslate"><span class="pre">actuator_acc0</span></code> is now expanded
 per environment before MuJoCo Warp recomputes it.</p></li>
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">MaterialCfg.reflectance</span></code> being ignored when building the MuJoCo
+spec. Contribution by &#64;bd-pmorais.</p></li>
 </ul>
 </section>
 </section>
@@ -565,7 +567,7 @@ bounding-volume filters.</p></li>
 <section id="id2">
 <h3>Changed<a class="headerlink" href="#id2" title="Link to this heading">#</a></h3>
 <ul class="simple">
-<li><p>Enabled skybox rendering for camera sensors.</p></li>
+<li><p>Enabled skybox rendering for camera sensors. Contribution by &#64;bd-pmorais.</p></li>
 <li><p>Bumped the minimum <code class="docutils literal notranslate"><span class="pre">mujoco-warp</span></code> to 3.10.0.2, which fixes <code class="docutils literal notranslate"><span class="pre">qfrc_constraint</span></code>
 being populated incorrectly across vectorized environments (<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1086">#1086</a>).
 Earlier 3.10.0.x releases are no longer supported.</p></li>
@@ -751,7 +753,8 @@ prefixed and scattered via <code class="docutils literal notranslate"><span clas
 <code class="docutils literal notranslate"><span class="pre">geom_dataid</span></code> table. Variants without a material get <code class="docutils literal notranslate"><span class="pre">matid</span> <span class="pre">=</span> <span class="pre">-1</span></code>.
 Contribution by &#64;omarrayyann.</p></li>
 <li><p>Added <code class="docutils literal notranslate"><span class="pre">dr.geom_matid</span></code> to randomize which baked material each geom uses
-per environment, sampling uniformly from <code class="docutils literal notranslate"><span class="pre">asset_cfg.material_names</span></code>.</p></li>
+per environment, sampling uniformly from <code class="docutils literal notranslate"><span class="pre">asset_cfg.material_names</span></code>.
+Contribution by &#64;bd-pmorais.</p></li>
 </ul>
 </section>
 <section id="id8">
@@ -1511,7 +1514,7 @@ By The mjlab Developers
   
   <div class="footer-item">
     <p class="last-updated">
-  Last updated on Jul 15, 2026.
+  Last updated on Jul 16, 2026.
   <br/>
 </p>
   </div>

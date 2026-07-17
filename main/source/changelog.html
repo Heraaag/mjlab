@@ -547,6 +547,12 @@ document.write(`
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>Fixed <code class="docutils literal notranslate"><span class="pre">ContactSensor</span></code> air-time tracking accumulating float32 sim-clock
+differences, whose quantization error grows with the clock magnitude and made
+<code class="docutils literal notranslate"><span class="pre">compute_first_contact</span></code> / <code class="docutils literal notranslate"><span class="pre">compute_first_air</span></code> miss touchdowns on long runs.
+The exact float64 substep <code class="docutils literal notranslate"><span class="pre">dt</span></code> is now accumulated instead. <a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1101">#1101</a></p></li>
+</ul>
 </section>
 </section>
 <section id="version-1-5-2-july-17-2026">

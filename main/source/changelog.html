@@ -544,10 +544,20 @@ document.write(`
 </section>
 <section id="changed">
 <h3>Changed<a class="headerlink" href="#changed" title="Link to this heading">#</a></h3>
+<ul class="simple">
+<li><p>The Viser reward bar panel’s term cap is now configurable via
+<code class="docutils literal notranslate"><span class="pre">ViewerConfig.reward_bar_max_terms</span></code>, so environments with more than 20
+reward terms can show them all. Defaults to 20, preserving previous behavior.
+<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1079">#1079</a></p></li>
+</ul>
 </section>
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>The Viser reward bar panel no longer <em>silently</em> drops reward terms beyond
+<code class="docutils literal notranslate"><span class="pre">max_terms</span></code>; it now emits a warning listing the hidden terms. Previously
+environments with more than 20 reward terms had the overflow disappear from
+the bar panel with no indication. <a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1079">#1079</a></p></li>
 <li><p>Fixed the <code class="docutils literal notranslate"><span class="pre">terrain_levels_vel</span></code> curriculum promoting every env from level 0
 to level 1 on the initial reset, ignoring <code class="docutils literal notranslate"><span class="pre">max_init_terrain_level=0</span></code>. Before
 the first step the robot sits at its spawn pose rather than a walked-to

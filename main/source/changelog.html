@@ -548,6 +548,29 @@ document.write(`
 <section id="fixed">
 <h3>Fixed<a class="headerlink" href="#fixed" title="Link to this heading">#</a></h3>
 <ul class="simple">
+<li><p>Fixed the <code class="docutils literal notranslate"><span class="pre">terrain_levels_vel</span></code> curriculum promoting every env from level 0
+to level 1 on the initial reset, ignoring <code class="docutils literal notranslate"><span class="pre">max_init_terrain_level=0</span></code>. Before
+the first step the robot sits at its spawn pose rather than a walked-to
+position, so the distance check was spurious; terrain levels are now frozen on
+that first reset. <a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1094">#1094</a></p></li>
+<li><p>Fixed the velocity task’s actor <code class="docutils literal notranslate"><span class="pre">joint_pos</span></code> observation not being biased by
+the <code class="docutils literal notranslate"><span class="pre">encoder_bias</span></code> domain randomization, so the encoder bias only affected
+actions and never the observed joint positions. The actor now observes biased
+joint positions while the critic keeps the true (unbiased) values as
+privileged information, matching the tracking task.
+See <a class="reference external" href="https://github.com/mujocolab/mjlab/discussions/1065">discussion #1065</a>.</p></li>
+<li><p>Hardened <code class="docutils literal notranslate"><span class="pre">fit_terrain_normal</span></code> against non-finite raycast hits. A single env
+with a diverged state produced a NaN/Inf covariance that made
+<code class="docutils literal notranslate"><span class="pre">torch.linalg.eigh</span></code> raise and abort the whole batch; such rows now fall back
+to the up vector. This stops the hard crash so a diverged env can be reset
+normally; it does not by itself make a diverged env’s downstream reward finite.
+<a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/912">#912</a></p></li>
+<li><p>Enabled <code class="docutils literal notranslate"><span class="pre">obs_normalization</span></code> on the Go1 velocity actor and critic to match
+the other velocity tasks. Without it, extreme-but-finite observations on rough
+terrain drove value/policy divergence that eventually surfaced as a
+<code class="docutils literal notranslate"><span class="pre">normal</span> <span class="pre">expects</span> <span class="pre">all</span> <span class="pre">elements</span> <span class="pre">of</span> <span class="pre">std</span> <span class="pre">&gt;=</span> <span class="pre">0.0</span></code> crash. Note that Go1 velocity
+checkpoints trained before this change carry no normalizer buffers and will no
+longer load; retrain from scratch. <a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/870">#870</a> <a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1044">#1044</a> <a class="extlink-issue reference external" href="https://github.com/mujocolab/mjlab/issues/1053">#1053</a></p></li>
 <li><p>Fixed <code class="docutils literal notranslate"><span class="pre">ContactSensor</span></code> air-time tracking accumulating float32 sim-clock
 differences, whose quantization error grows with the clock magnitude and made
 <code class="docutils literal notranslate"><span class="pre">compute_first_contact</span></code> / <code class="docutils literal notranslate"><span class="pre">compute_first_air</span></code> miss touchdowns on long runs.

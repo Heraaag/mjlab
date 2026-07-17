@@ -14,6 +14,29 @@ Changed
 Fixed
 ^^^^^
 
+- Fixed the ``terrain_levels_vel`` curriculum promoting every env from level 0
+  to level 1 on the initial reset, ignoring ``max_init_terrain_level=0``. Before
+  the first step the robot sits at its spawn pose rather than a walked-to
+  position, so the distance check was spurious; terrain levels are now frozen on
+  that first reset. :issue:`1094`
+- Fixed the velocity task's actor ``joint_pos`` observation not being biased by
+  the ``encoder_bias`` domain randomization, so the encoder bias only affected
+  actions and never the observed joint positions. The actor now observes biased
+  joint positions while the critic keeps the true (unbiased) values as
+  privileged information, matching the tracking task.
+  See `discussion #1065 <https://github.com/mujocolab/mjlab/discussions/1065>`_.
+- Hardened ``fit_terrain_normal`` against non-finite raycast hits. A single env
+  with a diverged state produced a NaN/Inf covariance that made
+  ``torch.linalg.eigh`` raise and abort the whole batch; such rows now fall back
+  to the up vector. This stops the hard crash so a diverged env can be reset
+  normally; it does not by itself make a diverged env's downstream reward finite.
+  :issue:`912`
+- Enabled ``obs_normalization`` on the Go1 velocity actor and critic to match
+  the other velocity tasks. Without it, extreme-but-finite observations on rough
+  terrain drove value/policy divergence that eventually surfaced as a
+  ``normal expects all elements of std >= 0.0`` crash. Note that Go1 velocity
+  checkpoints trained before this change carry no normalizer buffers and will no
+  longer load; retrain from scratch. :issue:`870` :issue:`1044` :issue:`1053`
 - Fixed ``ContactSensor`` air-time tracking accumulating float32 sim-clock
   differences, whose quantization error grows with the clock magnitude and made
   ``compute_first_contact`` / ``compute_first_air`` miss touchdowns on long runs.

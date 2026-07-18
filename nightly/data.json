@@ -2668,5 +2668,20 @@
       "ee_pos_error": 0.04614491015672684,
       "ee_ori_error": 0.16915883123874664
     }
+  },
+  {
+    "id": "kys25buh",
+    "name": "2026-07-18_02-19-57",
+    "url": "https://wandb.ai/gcbc_researchers/mjlab/runs/kys25buh",
+    "created_at": "2026-07-18T09:20:02Z",
+    "commit": "cc01d68",
+    "metrics": {
+      "success_rate": 0.970703125,
+      "mpkpe": 0.11411333084106445,
+      "r_mpkpe": 0.030811136588454247,
+      "joint_vel_error": 0.570432186126709,
+      "ee_pos_error": 0.0477922260761261,
+      "ee_ori_error": 0.17055843770503998
+    }
   }
 ]

@@ -2683,5 +2683,20 @@
       "ee_pos_error": 0.0477922260761261,
       "ee_ori_error": 0.17055843770503998
     }
+  },
+  {
+    "id": "lk1518el",
+    "name": "2026-07-19_02-04-58",
+    "url": "https://wandb.ai/gcbc_researchers/mjlab/runs/lk1518el",
+    "created_at": "2026-07-19T09:05:02Z",
+    "commit": "cc01d68",
+    "metrics": {
+      "success_rate": 0.9765625,
+      "mpkpe": 0.10377714037895203,
+      "r_mpkpe": 0.029935352504253387,
+      "joint_vel_error": 0.5537605285644531,
+      "ee_pos_error": 0.04701010137796402,
+      "ee_ori_error": 0.17207515239715576
+    }
   }
 ]

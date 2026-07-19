@@ -45,9 +45,11 @@ class UniformVelocityCommand(CommandTerm):
     self.is_standing_env = torch.zeros_like(self.is_heading_env)
     self.is_world_env = torch.zeros_like(self.is_heading_env)
     self.is_forward_env = torch.zeros_like(self.is_heading_env)
-
+    self.metrics["error_vel_x"] = torch.zeros(self.num_envs, device=self.device)
+    self.metrics["error_vel_y"] = torch.zeros(self.num_envs, device=self.device)
     self.metrics["error_vel_xy"] = torch.zeros(self.num_envs, device=self.device)
     self.metrics["error_vel_yaw"] = torch.zeros(self.num_envs, device=self.device)
+    self.metrics["cmd_vel_x_mean"] = torch.zeros(self.num_envs, device=self.device)
 
     # Set by create_gui() when the viewer is active.
     self._joystick_enabled: viser.GuiCheckboxHandle | None = None
@@ -67,10 +69,21 @@ class UniformVelocityCommand(CommandTerm):
       )
       / max_command_step
     )
+    self.metrics["error_vel_x"] += (
+    torch.abs(self.vel_command_b[:, 0] - self.robot.data.root_link_lin_vel_b[:, 0])
+    / max_command_step
+    )
+    self.metrics["error_vel_y"] += (
+        torch.abs(self.vel_command_b[:, 1] - self.robot.data.root_link_lin_vel_b[:, 1])
+        / max_command_step
+    )
+
+
     self.metrics["error_vel_yaw"] += (
       torch.abs(self.vel_command_b[:, 2] - self.robot.data.root_link_ang_vel_b[:, 2])
       / max_command_step
     )
+    self.metrics["cmd_vel_x_mean"] += torch.abs(self.vel_command_b[:, 0]) / max_command_step
 
   def _resample_command(self, env_ids: torch.Tensor) -> None:
     r = torch.empty(len(env_ids), device=self.device)
@@ -112,6 +125,10 @@ class UniformVelocityCommand(CommandTerm):
         [root_pos, root_quat, root_lin_vel_w, root_ang_vel_b], dim=-1
       )
       self.robot.write_root_state_to_sim(root_state, init_vel_env_ids)
+
+    for coeff_attr, idx in [("_coeff_x", 0), ("_coeff_y", 1), ("_coeff_yaw", 2)]:
+      if hasattr(self.cfg, coeff_attr):
+        self.vel_command_b[env_ids, idx] *= getattr(self.cfg, coeff_attr)[env_ids]
 
   def _update_command(self) -> None:
     if self.cfg.heading_command:

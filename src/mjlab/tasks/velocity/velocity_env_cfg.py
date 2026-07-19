@@ -273,9 +273,14 @@ def make_velocity_env_cfg() -> ManagerBasedRlEnvCfg:
   ##
 
   rewards = {
-    "track_linear_velocity": RewardTermCfg(
-      func=mdp.track_linear_velocity,
-      weight=2.0,
+    "track_linear_velocity_x": RewardTermCfg(
+      func=mdp.track_linear_velocity_x,
+      weight=1.5,
+      params={"command_name": "twist", "std": math.sqrt(0.25)},
+    ),
+    "track_linear_velocity_y": RewardTermCfg(
+      func=mdp.track_linear_velocity_y,
+      weight=0.5,
       params={"command_name": "twist", "std": math.sqrt(0.25)},
     ),
     "track_angular_velocity": RewardTermCfg(

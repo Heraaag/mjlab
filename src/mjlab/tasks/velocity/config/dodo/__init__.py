@@ -1,3 +1,4 @@
+from mjlab.rl import DreamerRunner
 from mjlab.tasks.registry import register_mjlab_task
 from mjlab.tasks.velocity.rl import VelocityOnPolicyRunner
 
@@ -9,7 +10,7 @@ register_mjlab_task(
   env_cfg=dodo_rough_env_cfg(),
   play_env_cfg=dodo_rough_env_cfg(play=True),
   rl_cfg=dodo_ppo_runner_cfg(),
-  runner_cls=VelocityOnPolicyRunner,
+  runner_cls=DreamerRunner,
 )
 
 register_mjlab_task(

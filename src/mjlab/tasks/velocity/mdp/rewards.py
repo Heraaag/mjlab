@@ -44,6 +44,41 @@ def track_linear_velocity(
   return torch.exp(-lin_vel_error / std**2)
 
 
+def track_linear_velocity_x(
+  env: ManagerBasedRlEnv,
+  std: float,
+  command_name: str,
+  asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
+) -> torch.Tensor:
+  """Reward for tracking the commanded forward (x) linear velocity only."""
+  asset: Entity = env.scene[asset_cfg.name]
+  command = env.command_manager.get_command(command_name)
+  assert command is not None, f"Command '{command_name}' not found."
+  actual = asset.data.root_link_lin_vel_b
+  x_error = torch.square(command[:, 0] - actual[:, 0])
+  env.extras["log"]["Metrics/vel_x_actual"] = actual[:, 0].mean()
+  env.extras["log"]["Metrics/vel_x_commanded"] = command[:, 0].mean()
+  env.extras["log"]["Metrics/vel_z_sq"] = actual[:, 2].pow(2).mean()
+  return torch.exp(-x_error / std**2)
+
+
+def track_linear_velocity_y(
+  env: ManagerBasedRlEnv,
+  std: float,
+  command_name: str,
+  asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
+) -> torch.Tensor:
+  """Reward for tracking the commanded lateral (y) linear velocity only."""
+  asset: Entity = env.scene[asset_cfg.name]
+  command = env.command_manager.get_command(command_name)
+  assert command is not None, f"Command '{command_name}' not found."
+  actual = asset.data.root_link_lin_vel_b
+  y_error = torch.square(command[:, 1] - actual[:, 1])
+  env.extras["log"]["Metrics/vel_y_actual"] = actual[:, 1].mean()
+  env.extras["log"]["Metrics/vel_y_commanded"] = command[:, 1].mean()
+  return torch.exp(-y_error / std**2)
+
+
 def track_angular_velocity(
   env: ManagerBasedRlEnv,
   std: float,
@@ -59,9 +94,7 @@ def track_angular_velocity(
   assert command is not None, f"Command '{command_name}' not found."
   actual = asset.data.root_link_ang_vel_b
   z_error = torch.square(command[:, 2] - actual[:, 2])
-  xy_error = torch.sum(torch.square(actual[:, :2]), dim=1)
-  ang_vel_error = z_error + xy_error
-  return torch.exp(-ang_vel_error / std**2)
+  return torch.exp(-z_error / std**2)
 
 
 class upright:
@@ -193,6 +226,19 @@ def body_angular_velocity_penalty(
   return torch.sum(torch.square(ang_vel_xy), dim=1)
 
 
+def body_yaw_velocity_penalty(
+  env: ManagerBasedRlEnv,
+  asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
+) -> torch.Tensor:
+  """Penalize body yaw rate. For robots without yaw actuation, suppress all
+  rotation about z (the track_angular_velocity reward is rate-based, so it does
+  not punish accumulated heading error)."""
+  asset: Entity = env.scene[asset_cfg.name]
+  ang_vel = asset.data.body_link_ang_vel_w[:, asset_cfg.body_ids, :]
+  ang_vel = ang_vel.squeeze(1)
+  return torch.square(ang_vel[:, 2])
+
+
 def angular_momentum_penalty(
   env: ManagerBasedRlEnv,
   sensor_name: str,
@@ -266,6 +312,8 @@ def feet_clearance(
       active = (total_command > command_threshold).float()
       cost = cost * active
   return cost
+
+# 
 
 
 class feet_swing_height:
@@ -380,6 +428,36 @@ def soft_landing(
       active = (total_command > command_threshold).float()
       cost = cost * active
   return cost
+
+
+def knee_flex(
+  env: ManagerBasedRlEnv,
+  command_name: str,
+  asset_cfg: SceneEntityCfg = _DEFAULT_ASSET_CFG,
+  command_threshold: float = 0.05,
+) -> torch.Tensor:
+  """Reward keeping knees bent during locomotion to discourage jumping gait.
+
+  Lower-leg joints have a default of -0.6 rad (bent). When the robot jumps
+  it extends them toward 0. This reward decays as the knees straighten
+  beyond their default bent position.
+  """
+  asset: Entity = env.scene[asset_cfg.name]
+  command = env.command_manager.get_command(command_name)
+  assert command is not None
+
+  q = asset.data.joint_pos[:, asset_cfg.joint_ids]           # [B, N]
+  default_q = asset.data.default_joint_pos[:, asset_cfg.joint_ids]  # [B, N]
+
+  # Positive when legs are more straight than default (bad)
+  straightening = torch.clamp(q - default_q, min=0.0)
+  reward = torch.exp(-straightening.mean(dim=1) / 0.1)
+
+  linear_norm = torch.norm(command[:, :2], dim=1)
+  angular_norm = torch.abs(command[:, 2])
+  active = ((linear_norm + angular_norm) > command_threshold).float()
+
+  return reward * active
 
 
 class variable_posture:
